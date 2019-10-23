@@ -1,0 +1,8 @@
+node_modules/
+static/
+/.idea/.gitignore
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/react-geekbrains.iml
+/.idea/vcs.xml
+/package-lock.json
