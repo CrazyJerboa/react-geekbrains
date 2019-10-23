@@ -11,22 +11,11 @@ const MessageField = (props) => {
             <h1>Chat:</h1>
 
             {props.messages.map(message => <MessageComponent text={ message } />)}
-
-            <button onClick={addTestMessage}>click me</button>
         </div>
     );
 };
 
-const addTestMessage = () => {
-    messages.push('Нормально');
-    console.log(messages);
-    ManualRender();
-}
-
-const ManualRender = () => {
-    ReactDOM.render(
-        <MessageField messages={ messages } />,
-        document.getElementById('root'),
-    );
-}
-ManualRender();
+ReactDOM.render(
+    <MessageField messages={ messages } />,
+    document.getElementById('root'),
+);
