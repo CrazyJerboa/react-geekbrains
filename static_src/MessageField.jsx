@@ -10,19 +10,25 @@ function randomChoice(arr) {
 
 export default class MessageField extends React.Component {
     state = {
-        messages: ['Привет!', 'Как дела?']
+        messages: [
+            ['Вы','Привет!'],
+            ['Вы','Как дела?']
+        ],
+        isYourMessage: true
     }
 
     componentDidUpdate() {
         const {messages} = this.state;
 
-        if (messages.length % 2 === 1) {
+        if (!this.state.isYourMessage) {
             setTimeout(() => {
                 this.setState({messages: [
                     ...messages,
-                    randomChoice(botAnswers)
-                ]})
+                    ['Бот',randomChoice(botAnswers)]
+                ]});
             }, 1000);
+
+            this.setState({ isYourMessage: true });
         }
     }
 
@@ -31,14 +37,16 @@ export default class MessageField extends React.Component {
 
         this.setState({ messages: [
             ...messages,
-            'Нормально'
+            ['Вы', 'Нормально']
         ]});
+
+        this.setState({ isYourMessage: false });
     }
 
     render() {
         const {messages} = this.state;
         const messageElements =  messages.map(message =>
-            <Message key={message} text={message} />
+            <Message key={message} author={message[0]} text={message[1]} />
         );
 
         return (
