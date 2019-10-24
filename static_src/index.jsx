@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import App from "./App";
+import MessageField from "./MessageField";
 
 
 
@@ -30,7 +30,7 @@ import App from "./App";
 //
 // const ManualRender = () => {
     ReactDOM.render(
-        <App />,
+        <MessageField />,
         document.getElementById('root'),
     );
 // }
