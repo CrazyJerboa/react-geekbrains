@@ -14,7 +14,7 @@ export default class MessageField extends React.Component {
             ['Вы','Привет!'],
             ['Вы','Как дела?']
         ],
-        isYourMessage: true
+        isYourMessage: false
     }
 
     componentDidUpdate() {
@@ -34,6 +34,7 @@ export default class MessageField extends React.Component {
 
     handleSendMessage = () => {
         const {messages} = this.state;
+        this.setState({ isYourMessage: true });
 
         this.setState({ messages: [
             ...messages,
