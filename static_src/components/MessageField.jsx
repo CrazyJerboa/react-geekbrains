@@ -4,8 +4,6 @@ import { TextField, FloatingActionButton } from 'material-ui';
 import SendIcon from 'material-ui/svg-icons/content/send';
 import Message from './Message';
 
-import '../styles/styles.css';
-
 const botAnswers = ['Отстань, я робот', 'Кто такая Сири???', 'Поговорите лучше с Алисой', 'Тебе конец, кожаный мешок'];
 
 function randomChoice(arr) {
@@ -67,12 +65,12 @@ export default class MessageField extends React.Component {
         );
 
         return (
-            <div className="layout">
+            <div className="message-field__outer">
                 <div className="message-field">
                     { messageElements }
                 </div>
 
-                <div style={ { width: '100%', display: 'flex' } }>
+                <div className="message-field__bottom">
                     <TextField
                         name="input"
                         fullWidth={ true }
