@@ -4,8 +4,6 @@ import { TextField, FloatingActionButton } from 'material-ui';
 import SendIcon from 'material-ui/svg-icons/content/send';
 import Message from './Message';
 
-import '../styles/styles.css';
-
 const botAnswers = ['Отстань, я робот', 'Кто такая Сири???', 'Поговорите лучше с Алисой', 'Тебе конец, кожаный мешок'];
 
 function randomChoice(arr) {
@@ -19,14 +17,14 @@ export default class MessageField extends React.Component {
         }, {
             text: 'Как дела?', sender: 'Вы'
         }],
-        isYourMessage: true,
         input: ''
     }
 
-    componentDidUpdate() {
-        const {messages} = this.state;
+    componentDidUpdate(prevProps, prevState) {
+        // const {messages} = this.state;
 
-        if (!this.state.isYourMessage) {
+        // if (!this.state.isYourMessage) {
+        if (this.state.messages[this.state.messages.length - 1].sender === 'Вы' && prevState.messages.length < this.state.messages.length) {
             setTimeout(() => {
                 this.setState({messages: [
                     ...this.state.messages,
@@ -34,20 +32,20 @@ export default class MessageField extends React.Component {
                 ]});
             }, 1000);
 
-            this.setState({ isYourMessage: true });
+            // this.setState({ isYourMessage: true });
         }
     }
 
     handleSendMessage = () => {
         const {messages, input} = this.state;
-        this.setState({ isYourMessage: true });
+        // this.setState({ isYourMessage: true });
 
         this.setState({ messages: [
             ...messages,
             {sender: 'Вы', text: input}
         ], input: ''});
 
-        this.setState({ isYourMessage: false });
+        // this.setState({ isYourMessage: false });
     }
 
     handleChange = (event) => {
@@ -67,12 +65,12 @@ export default class MessageField extends React.Component {
         );
 
         return (
-            <div className="layout">
+            <div className="message-field__outer">
                 <div className="message-field">
                     { messageElements }
                 </div>
 
-                <div style={ { width: '100%', display: 'flex' } }>
+                <div className="message-field__bottom">
                     <TextField
                         name="input"
                         fullWidth={ true }
