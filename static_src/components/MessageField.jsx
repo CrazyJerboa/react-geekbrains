@@ -14,28 +14,17 @@ function randomChoice(arr) {
 export default class MessageField extends React.Component {
     static propTypes = {
         chatId: PropTypes.number.isRequired,
+        onHandleSendMessage: PropTypes.func,
+        onHandleKeyUp: PropTypes.func,
+        chats: PropTypes.array,
+        messages: PropTypes.array
     }
     static defaultProps = {
         chatId: 1
     }
 
     state = {
-        chats: [[1,2], [], []],
-        messages: [{
-            text: 'Привет!', sender: 'Вы'
-        }, {
-            text: 'Как дела?', sender: 'Вы'
-        }],
         input: ''
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.messages.length < this.state.messages.length &&
-            this.state.messages[this.state.messages.length - 1].sender === 'Вы') {
-            setTimeout(() => {
-                this.handleSendMessage(randomChoice(botAnswers), 'Бот');
-            }, 1000);
-        }
     }
 
     handleChange = (event) => {
@@ -43,31 +32,30 @@ export default class MessageField extends React.Component {
     }
 
     handleKeyUp = (event, message, sender) => {
-        if (event.keyCode === 13) {
-            this.handleSendMessage(message, sender);
-        }
+        this.props.onHandleKeyUp(event, message, sender);
     }
 
     handleSendMessage = (message, sender) => {
-        const { chats } = this.state;
-        chats[this.props.chatId - 1] =
-            [...chats[this.props.chatId - 1], this.state.messages.length + 1];
+        this.props.onHandleSendMessage(message, sender);
+        this.setState({input: ''});
+    }
 
-        this.setState({
-            messages: [
-                ...this.state.messages,
-                {sender: sender, text: message}
-            ],
-            chats: chats,
-            input: ''
-        });
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.messages.length < this.props.messages.length &&
+            this.props.messages[this.props.messages.length - 1].sender === 'Вы') {
+            setTimeout(() => {
+                this.handleSendMessage(randomChoice(botAnswers), 'Бот');
+            }, 1000);
+        }
     }
 
     render() {
-        const { chats, messages } = this.state;
+        const { chats, messages } = this.props;
         const { chatId } = this.props;
 
-        const messageElements = chats[chatId - 1].map(messageId => (
+        console.log('chats', chats);
+        console.log('messages', messages);
+        const messageElements = chats[chatId]['messages'].map(messageId => (
             <Message
                 key={messageId}
                 text={messages[messageId - 1].text}

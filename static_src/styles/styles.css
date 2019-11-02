@@ -22,12 +22,35 @@ body {
 }
 
 .header {
+    align-items: center;
     padding: 10px 40px;
     height: 60px;
-    justify-content: center;
+}
+.header__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.header__inner h1 {
+    margin: 0;
+}
+.header__inner a {
+    color: #fff;
 }
 .container-main {
     height: calc(100% - 60px);
+}
+
+.MuiGrid-grid-xs-3,
+.MuiGrid-grid-xs-9 {
+    height: 100%;
+}
+.MuiGrid-grid-xs-3 {
+    padding-right: 0 !important;
+}
+.MuiGrid-grid-xs-9 {
+    padding-left: 0 !important;
 }
 
 .message-field__outer {
@@ -63,4 +86,19 @@ body {
     margin-bottom: 0;
     color: gray;
     font-size: 14px;
+}
+
+.list__outer {
+    position: relative;
+    height: 100%;
+}
+.list__users {
+    overflow-y: auto;
+    padding-bottom: 80px !important;
+    height: 100%;
+}
+.add_chat_btn {
+    position: absolute;
+    right: 20px;
+    bottom: 15px;
 }
