@@ -13,6 +13,12 @@ module.exports = {
         modules: [path.resolve(__dirname, 'static_src'), 'node_modules'],
         extensions: ['.jsx', '.js'],
     },
+    devServer: {
+        port: 8080,
+        historyApiFallback: {
+            index: 'index.html'
+        }
+    },
     module: {
         rules: [
             {
@@ -42,4 +48,5 @@ module.exports = {
             },
         ],
     },
+    devtool: 'cheap-inline-module-source-map'
 };

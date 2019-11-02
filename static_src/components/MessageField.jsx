@@ -3,6 +3,7 @@ import React from 'react';
 import { TextField, FloatingActionButton } from 'material-ui';
 import SendIcon from 'material-ui/svg-icons/content/send';
 import Message from './Message';
+import PropTypes from "prop-types";
 
 const botAnswers = ['Отстань, я робот', 'Кто такая Сири???', 'Поговорите лучше с Алисой', 'Тебе конец, кожаный мешок'];
 
@@ -11,7 +12,15 @@ function randomChoice(arr) {
 }
 
 export default class MessageField extends React.Component {
+    static propTypes = {
+        chatId: PropTypes.number.isRequired,
+    }
+    static defaultProps = {
+        chatId: 1
+    }
+
     state = {
+        chats: [[1,2], [], []],
         messages: [{
             text: 'Привет!', sender: 'Вы'
         }, {
@@ -21,48 +30,50 @@ export default class MessageField extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        // const {messages} = this.state;
-
-        // if (!this.state.isYourMessage) {
-        if (this.state.messages[this.state.messages.length - 1].sender === 'Вы' && prevState.messages.length < this.state.messages.length) {
+        if (prevState.messages.length < this.state.messages.length &&
+            this.state.messages[this.state.messages.length - 1].sender === 'Вы') {
             setTimeout(() => {
-                this.setState({messages: [
-                    ...this.state.messages,
-                    {sender: 'Бот', text: randomChoice(botAnswers)}
-                ]});
+                this.handleSendMessage(randomChoice(botAnswers), 'Бот');
             }, 1000);
-
-            // this.setState({ isYourMessage: true });
         }
-    }
-
-    handleSendMessage = () => {
-        const {messages, input} = this.state;
-        // this.setState({ isYourMessage: true });
-
-        this.setState({ messages: [
-            ...messages,
-            {sender: 'Вы', text: input}
-        ], input: ''});
-
-        // this.setState({ isYourMessage: false });
     }
 
     handleChange = (event) => {
         this.setState({[event.target.name]: event.target.value});
     }
 
-    handleKeyUp = (event) => {
+    handleKeyUp = (event, message, sender) => {
         if (event.keyCode === 13) {
-            this.handleSendMessage();
+            this.handleSendMessage(message, sender);
         }
     }
 
+    handleSendMessage = (message, sender) => {
+        const { chats } = this.state;
+        chats[this.props.chatId - 1] =
+            [...chats[this.props.chatId - 1], this.state.messages.length + 1];
+
+        this.setState({
+            messages: [
+                ...this.state.messages,
+                {sender: sender, text: message}
+            ],
+            chats: chats,
+            input: ''
+        });
+    }
+
     render() {
-        const {messages, input} = this.state;
-        const messageElements =  messages.map(message =>
-            <Message key={message} author={message.sender} text={message.text} />
-        );
+        const { chats, messages } = this.state;
+        const { chatId } = this.props;
+
+        const messageElements = chats[chatId - 1].map(messageId => (
+            <Message
+                key={messageId}
+                text={messages[messageId - 1].text}
+                sender={messages[messageId - 1].sender}
+            />
+        ));
 
         return (
             <div className="message-field__outer">
@@ -77,11 +88,11 @@ export default class MessageField extends React.Component {
                         hintText="Введите сообщение"
                         style={ { fontSize: '22px' } }
                         onChange={ this.handleChange }
-                        value={ input }
-                        onKeyUp={ (event) => this.handleKeyUp(event, input) }
+                        value={ this.state.input }
+                        onKeyUp={ (event) => this.handleKeyUp(event, this.state.input, 'Вы') }
                     />
                     <FloatingActionButton
-                        onClick={ this.handleSendMessage }
+                        onClick={ () => this.handleSendMessage(this.state.input, 'Вы') }
                     >
                         <SendIcon />
                     </FloatingActionButton>
