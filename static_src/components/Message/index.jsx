@@ -1,9 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-export default class Message extends React.Component {
+import './styles.css';
+
+export default class Index extends React.Component {
     render() {
-        console.log('Message render');
+        console.log('Index render');
         return (
             <div
                 className="message"

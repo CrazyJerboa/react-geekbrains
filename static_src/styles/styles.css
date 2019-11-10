@@ -74,20 +74,6 @@ body {
     height: 80px;
 }
 
-.message {
-    background-color: lightblue;
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 18px;
-    margin: 5px;
-}
-
-.message-sender {
-    margin-bottom: 0;
-    color: gray;
-    font-size: 14px;
-}
-
 .list__outer {
     position: relative;
     height: 100%;
@@ -97,8 +83,14 @@ body {
     padding-bottom: 80px !important;
     height: 100%;
 }
-.add_chat_btn {
+
+.list__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     position: absolute;
-    right: 20px;
     bottom: 15px;
+    left: 0;
+    padding-right: 20px;
+    width: 100%;
 }

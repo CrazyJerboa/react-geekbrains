@@ -1,9 +1,12 @@
 import React from 'react';
+import PropTypes from "prop-types";
+
+import { bindActionCreators } from "redux";
+import connect from "react-redux/es/connect/connect";
 
 import { TextField, FloatingActionButton } from 'material-ui';
 import SendIcon from 'material-ui/svg-icons/content/send';
-import Message from './Message';
-import PropTypes from "prop-types";
+import Message from '../components/Message/index';
 
 const botAnswers = ['Отстань, я робот', 'Кто такая Сири???', 'Поговорите лучше с Алисой', 'Тебе конец, кожаный мешок'];
 
@@ -11,13 +14,11 @@ function randomChoice(arr) {
     return arr[Math.floor(arr.length * Math.random())];
 }
 
-export default class MessageField extends React.Component {
+class MessageField extends React.Component {
     static propTypes = {
         chatId: PropTypes.number.isRequired,
-        onHandleSendMessage: PropTypes.func,
-        onHandleKeyUp: PropTypes.func,
-        chats: PropTypes.array,
-        messages: PropTypes.array
+        chats: PropTypes.object,
+        messages: PropTypes.object
     }
     static defaultProps = {
         chatId: 1
@@ -32,17 +33,19 @@ export default class MessageField extends React.Component {
     }
 
     handleKeyUp = (event, message, sender) => {
-        this.props.onHandleKeyUp(event, message, sender);
+        if (event.keyCode === 13) {
+            this.props.sendMessage(message, sender);
+        }
     }
 
     handleSendMessage = (message, sender) => {
-        this.props.onHandleSendMessage(message, sender);
+        this.props.sendMessage(message, sender);
         this.setState({input: ''});
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.messages.length < this.props.messages.length &&
-            this.props.messages[this.props.messages.length - 1].sender === 'Вы') {
+        if (Object.keys(prevProps.messages).length < Object.keys(this.props.messages).length &&
+            this.props.messages[Object.keys(this.props.messages).length].sender === 'Вы') {
             setTimeout(() => {
                 this.handleSendMessage(randomChoice(botAnswers), 'Бот');
             }, 1000);
@@ -55,13 +58,15 @@ export default class MessageField extends React.Component {
 
         console.log('chats', chats);
         console.log('messages', messages);
-        const messageElements = chats[chatId]['messages'].map(messageId => (
-            <Message
-                key={messageId}
-                text={messages[messageId - 1].text}
-                sender={messages[messageId - 1].sender}
-            />
-        ));
+        console.log('chatId', chatId);
+        const messageElements = this.props.chats[chatId]['messageList'].map(messageId => (
+                <Message
+                    key={messageId}
+                    text={messages[messageId].text}
+                    sender={messages[messageId].sender}
+                />
+            )
+        );
 
         return (
             <div className="message-field__outer">
@@ -89,3 +94,11 @@ export default class MessageField extends React.Component {
         )
     }
 }
+
+const mapStateToProps = ({ chatReducer }) => ({
+    chats: chatReducer.chats,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessageField);

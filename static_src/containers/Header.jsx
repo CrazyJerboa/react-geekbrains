@@ -7,13 +7,16 @@ import AppBar from '@material-ui/core/AppBar';
 import List from "@material-ui/core/List";
 
 export default class Header extends React.Component {
+    static propTypes = {
+        chatId: PropTypes.number
+    };
 
     static defaultProps = {
         chatId: 1,
     };
 
     render() {
-        console.log(this.props.chatId)
+        console.log('asd', this.props.chatId)
         return (
             <AppBar position="static" className="header">
                 {this.props.chatId == 'Profile' ? (
