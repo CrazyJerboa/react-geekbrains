@@ -8,6 +8,9 @@ import { TextField, FloatingActionButton } from 'material-ui';
 import SendIcon from 'material-ui/svg-icons/content/send';
 import Message from '../components/Message/index';
 
+import { addChat } from '../actions/chatActions';
+import { sendMessage } from '../actions/messageActions';
+
 const botAnswers = ['Отстань, я робот', 'Кто такая Сири???', 'Поговорите лучше с Алисой', 'Тебе конец, кожаный мешок'];
 
 function randomChoice(arr) {
@@ -34,12 +37,13 @@ class MessageField extends React.Component {
 
     handleKeyUp = (event, message, sender) => {
         if (event.keyCode === 13) {
-            this.props.sendMessage(message, sender);
+            this.handleSendMessage(message, sender);
         }
     }
 
     handleSendMessage = (message, sender) => {
-        this.props.sendMessage(message, sender);
+        const messageId = Object.keys(this.props.messages).length + 1;
+        this.props.sendMessage(messageId, message, sender, this.props.chatId);
         this.setState({input: ''});
     }
 
@@ -56,9 +60,6 @@ class MessageField extends React.Component {
         const { chats, messages } = this.props;
         const { chatId } = this.props;
 
-        console.log('chats', chats);
-        console.log('messages', messages);
-        console.log('chatId', chatId);
         const messageElements = this.props.chats[chatId]['messageList'].map(messageId => (
                 <Message
                     key={messageId}
@@ -95,10 +96,11 @@ class MessageField extends React.Component {
     }
 }
 
-const mapStateToProps = ({ chatReducer }) => ({
+const mapStateToProps = ({ chatReducer, messageReducer }) => ({
     chats: chatReducer.chats,
+    messages: messageReducer.messages,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({sendMessage}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageField);
