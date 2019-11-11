@@ -8,6 +8,7 @@ import List from "@material-ui/core/List";
 
 export default class Header extends React.Component {
     static propTypes = {
+        chats: PropTypes.object,
         chatId: PropTypes.number
     };
 
@@ -16,17 +17,16 @@ export default class Header extends React.Component {
     };
 
     render() {
-        console.log('asd', this.props.chatId)
         return (
             <AppBar position="static" className="header">
                 {this.props.chatId == 'Profile' ? (
                     <div className="header__inner">
                         <Link to="/">Back</Link>
-                        <h1>Profile</h1>
+                        <p></p>
                     </div>
                 ) : (
                     <div className="header__inner">
-                        <h1>Chat { this.props.chatId }</h1>
+                        <h1>{ this.props.chatsName }</h1>
                         <Link to="/profile">Profile</Link>
                     </div>
                 )}

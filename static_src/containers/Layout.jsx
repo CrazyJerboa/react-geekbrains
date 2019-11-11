@@ -15,7 +15,8 @@ import { sendMessage } from "../actions/messageActions";
 class Layout extends React.Component {
     static propTypes = {
         chatId: PropTypes.number,
-        sendMessage: PropTypes.func.isRequired
+        sendMessage: PropTypes.func.isRequired,
+        chats: PropTypes.object
     };
 
     static defaultProps = {
@@ -24,10 +25,6 @@ class Layout extends React.Component {
 
 
     state = {
-        messages: {
-            1: { text: 'Привет!', sender: 'Вы' },
-            2: { text: 'Как дела?', sender: 'Вы' }
-        },
         windowHeight: 0
     }
 
@@ -50,7 +47,10 @@ class Layout extends React.Component {
     render() {
         return (
             <div className="layout" style={{height:this.state.windowHeight}}>
-                <Header chatId={ this.props.chatId } />
+                <Header
+                    chatId={ this.props.chatId }
+                    chatsName={ this.props.chats[this.props.chatId].title }
+                />
 
                 <Grid container spacing={2} className="container-main">
                     <Grid item xs={3}>
@@ -59,7 +59,6 @@ class Layout extends React.Component {
                     <Grid item xs={9}>
                         <MessageField
                             chatId={ this.props.chatId }
-                            messages={ this.state.messages }
                             sendMessage={ this.sendMessage }
                         />
                     </Grid>
@@ -69,7 +68,9 @@ class Layout extends React.Component {
     }
 }
 
-const mapStateToProps = ({}) => ({});
+const mapStateToProps = ({chatReducer}) => ({
+    chats: chatReducer.chats
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage }, dispatch);
 
