@@ -11,12 +11,6 @@ import Message from '../components/Message/index';
 import { addChat } from '../actions/chatActions';
 import { sendMessage } from '../actions/messageActions';
 
-const botAnswers = ['Отстань, я робот', 'Кто такая Сири???', 'Поговорите лучше с Алисой', 'Тебе конец, кожаный мешок'];
-
-function randomChoice(arr) {
-    return arr[Math.floor(arr.length * Math.random())];
-}
-
 class MessageField extends React.Component {
     static propTypes = {
         chatId: PropTypes.number.isRequired,
@@ -42,17 +36,14 @@ class MessageField extends React.Component {
     }
 
     handleSendMessage = (message, sender) => {
+        const {chatId, messages} = this.props;
         const messageId = Object.keys(this.props.messages).length + 1;
-        this.props.sendMessage(messageId, message, sender, this.props.chatId);
-        this.setState({input: ''});
-    }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (Object.keys(prevProps.messages).length < Object.keys(this.props.messages).length &&
-            this.props.messages[Object.keys(this.props.messages).length].sender === 'Вы') {
-            setTimeout(() => {
-                this.handleSendMessage(randomChoice(botAnswers), 'Бот');
-            }, 1000);
+        if (this.state.input.length > 0 || sender === 'Бот') {
+            this.props.sendMessage(messageId, message, sender, this.props.chatId);
+        }
+        if (sender === 'Вы') {
+            this.setState({input: ''});
         }
     }
 

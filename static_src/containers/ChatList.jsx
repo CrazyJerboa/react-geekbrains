@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
+import {push} from "connected-react-router";
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -17,7 +18,8 @@ import { addChat } from '../actions/chatActions';
 class ChatList extends React.Component {
     static propTypes = {
         onHandleCreateChat: PropTypes.func,
-        chats: PropTypes.object
+        chats: PropTypes.object,
+        push: PropTypes.func.isRequired
     }
 
     state = {
@@ -42,13 +44,13 @@ class ChatList extends React.Component {
     render() {
         const { chats } = this.props;
         const listItems = Object.keys(chats).map((key) => {
-
             return (
-                <Link to={'/chat/' + key + '/'} key={key}>
-                    <ListItem button>
-                        <ListItemText primary={chats[key]['title']}/>
-                    </ListItem>
-                </Link>
+                <ListItem
+                    button
+                    onClick={() => this.props.push('/chat/' + key + '/')}
+                >
+                    <ListItemText primary={chats[key]['title']}/>
+                </ListItem>
             )
         });
 
@@ -91,6 +93,6 @@ const mapStateToProps = ({chatReducer}) => ({
     chats: chatReducer.chats
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ addChat }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat, push }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

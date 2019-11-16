@@ -5,7 +5,8 @@ const initialStore = {
     messages: {
         1: { text: 'Привет!', sender: 'Вы' },
         2: { text: 'Как дела?', sender: 'Вы' }
-    }
+    },
+    isLoading: false
 };
 
 
