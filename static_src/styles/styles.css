@@ -94,3 +94,10 @@ body {
     padding-right: 20px;
     width: 100%;
 }
+
+.MuiListItem-button.new_mess {
+    color: red;
+}
+.MuiListItem-button.active {
+    background: #e2e2e2;
+}

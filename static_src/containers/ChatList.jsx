@@ -14,12 +14,16 @@ import {TextField, FloatingActionButton} from "material-ui";
 import AddIcon from "material-ui/svg-icons/content/add";
 
 import { addChat } from '../actions/chatActions';
+import { setNewMessToZero } from '../actions/messageActions';
 
 class ChatList extends React.Component {
     static propTypes = {
         onHandleCreateChat: PropTypes.func,
+        setNewMessToZero: PropTypes.func,
         chats: PropTypes.object,
-        push: PropTypes.func.isRequired
+        push: PropTypes.func.isRequired,
+        newMessInChat: PropTypes.number,
+        chatId: PropTypes.number
     }
 
     state = {
@@ -42,12 +46,35 @@ class ChatList extends React.Component {
     }
 
     render() {
-        const { chats } = this.props;
+        const { chats, newMessInChat, chatId } = this.props;
+
         const listItems = Object.keys(chats).map((key) => {
+
+            let activeClass = '';
+            let newMessClass = '';
+
+            if (chatId === parseInt(key)) {
+                activeClass = 'active';
+            }
+            if (newMessInChat === parseInt(key)) {
+                newMessClass = 'new_mess';
+            }
+
+            let classesList = activeClass + ' ' + newMessClass;
+
             return (
                 <ListItem
                     button
-                    onClick={() => this.props.push('/chat/' + key + '/')}
+                    onClick={
+                        () => {
+                            this.props.push('/chat/' + key + '/');
+                            if (parseInt(key) === newMessInChat) {
+                                alert()
+                                this.props.setNewMessToZero(0);
+                            }
+                        }
+                    }
+                    className={classesList}
                 >
                     <ListItemText primary={chats[key]['title']}/>
                 </ListItem>
@@ -90,9 +117,10 @@ class ChatList extends React.Component {
 }
 
 const mapStateToProps = ({chatReducer}) => ({
-    chats: chatReducer.chats
+    chats: chatReducer.chats,
+    newMessInChat: chatReducer.newMessInChat
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ addChat, push }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat, setNewMessToZero, push }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
