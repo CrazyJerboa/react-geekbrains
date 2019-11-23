@@ -9,10 +9,11 @@ import SendIcon from 'material-ui/svg-icons/content/send';
 import Message from '../components/Message/index';
 
 import { addChat } from '../actions/chatActions';
-import { sendMessage } from '../actions/messageActions';
+import { sendMessage, removeMessage } from '../actions/messageActions';
 
 class MessageField extends React.Component {
     static propTypes = {
+        removeMessage: PropTypes.func,
         chatId: PropTypes.number.isRequired,
         chats: PropTypes.object,
         messages: PropTypes.object
@@ -54,8 +55,10 @@ class MessageField extends React.Component {
         const messageElements = this.props.chats[chatId]['messageList'].map(messageId => (
                 <Message
                     key={messageId}
+                    messageId={messageId}
                     text={messages[messageId].text}
                     sender={messages[messageId].sender}
+                    handleRemoveMessage = {this.props.removeMessage}
                 />
             )
         );
@@ -92,6 +95,6 @@ const mapStateToProps = ({ chatReducer, messageReducer }) => ({
     messages: messageReducer.messages,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({sendMessage}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({sendMessage, removeMessage}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageField);

@@ -1,5 +1,5 @@
 import update from 'react-addons-update';
-import { SEND_MESSAGE } from '../actions/messageActions';
+import { SEND_MESSAGE, REMOVE_MESSAGE } from '../actions/messageActions';
 
 const initialStore = {
     messages: {
@@ -21,8 +21,22 @@ export default function messageReducer(store = initialStore, action) {
                             sender: action.sender
                         }
                     }
-                },
+                }
             });
+        }
+        case REMOVE_MESSAGE: {
+            let obj = {}
+
+            for (let key in store.messages) {
+                if (parseInt(key) !== action.messageId)
+                    obj[key] = store.messages[key];
+            }
+
+            return update(store, {
+                messages: {
+                    $set: obj
+                }
+            })
         }
         default:
             return store;

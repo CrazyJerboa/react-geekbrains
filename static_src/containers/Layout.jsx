@@ -54,7 +54,9 @@ class Layout extends React.Component {
 
                 <Grid container spacing={2} className="container-main">
                     <Grid item xs={3}>
-                        <ChatList />
+                        <ChatList
+                            chatId={ this.props.chatId }
+                        />
                     </Grid>
                     <Grid item xs={9}>
                         <MessageField
