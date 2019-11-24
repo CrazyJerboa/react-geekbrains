@@ -49,7 +49,7 @@ class Layout extends React.Component {
             <div className="layout" style={{height:this.state.windowHeight}}>
                 <Header
                     chatId={ this.props.chatId }
-                    chatsName={ this.props.chats[this.props.chatId].title }
+                    chatsName={ Object.keys(this.props.chats).length != 0 ? this.props.chats[this.props.chatId].title : '' }
                 />
 
                 <Grid container spacing={2} className="container-main">
