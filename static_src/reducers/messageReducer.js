@@ -4,8 +4,13 @@ import {
     REMOVE_MESSAGE,
     START_MESSAGES_LOADING,
     SUCCESS_MESSAGES_LOADING,
-    ERROR_MESSAGES_LOADING
+    ERROR_MESSAGES_LOADING,
 } from '../actions/messageActions';
+import {
+    START_CHATS_LOADING,
+    SUCCESS_CHATS_LOADING,
+    ERROR_CHATS_LOADING,
+} from '../actions/chatActions';
 
 const initialStore = {
     messages: {},
@@ -58,6 +63,21 @@ export default function messageReducer(store = initialStore, action) {
             });
         }
         case ERROR_MESSAGES_LOADING: {
+            return update(store, {
+                isLoading: { $set: false },
+            });
+        }
+        case START_CHATS_LOADING: {
+            return update(store, {
+                isLoading: { $set: true },
+            });
+        }
+        case SUCCESS_CHATS_LOADING: {
+            return update(store, {
+                messages: { $set: action.payload.entities.messages },
+            });
+        }
+        case ERROR_CHATS_LOADING: {
             return update(store, {
                 isLoading: { $set: false },
             });

@@ -126,9 +126,10 @@ class MessageField extends React.Component {
 const mapStateToProps = ({ chatReducer, messageReducer }) => ({
     chats: chatReducer.chats,
     messages: messageReducer.messages,
-    isLoading: messageReducer.isLoading
+    isLoading: chatReducer.isLoading
 });
 
+// const mapDispatchToProps = dispatch => bindActionCreators({sendMessage, removeMessage, loadMessages, loadChats}, dispatch);
 const mapDispatchToProps = dispatch => bindActionCreators({sendMessage, removeMessage, loadMessages, loadChats}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageField);

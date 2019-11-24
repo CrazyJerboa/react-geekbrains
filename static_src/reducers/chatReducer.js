@@ -9,7 +9,8 @@ import {
 
 const initialStore = {
     chats: {},
-    newMessInChat: 0
+    newMessInChat: 0,
+    isLoading: true
 };
 
 
